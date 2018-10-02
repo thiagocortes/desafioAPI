@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -61,27 +62,34 @@ public class DesafioService {
 	 * @param request String
 	 * @return Map de vogais
 	 */
-	private Map<Character, Integer> preencherMap(String request){
+	private Map<Character, Integer> preencherMap(String requestParam){
 		Map<Character, Integer> vogaisCount = new LinkedHashMap<Character, Integer>();
 		
-		if(request.length() == 1) {
-			//Para satisfazer a regra a string deve ter pelo menos 2 caracteres
+		String request = removerAcentos(requestParam.toUpperCase());
+		
+		if(request.length() <= 2) {
+			//Para satisfazer a regra a string deve ter pelo menos 3 caracteres
 			vogaisCount.put(request.charAt(0), 0);
-		}else if(request.length() == 2) {
-			char first = request.charAt(0);
-			char second = request.charAt(1);
-			if(!isVogal(first) && isVogal(second)) {
-				vogaisCount.put(second, 2);
+		}else if(request.length() == 3) {
+			Character first = request.charAt(0);
+			Character second = request.charAt(1);
+			Character third = request.charAt(2);
+			if(isVogal(first) && !isVogal(second) && isVogal(third) && !Objects.equals(first, third)) {
+				vogaisCount.put(third, 2);
 			}
 		}else {
 			//Caso a primeira letra seja uma vogal atribui ao Map
-			char first = request.charAt(0);
-			if(isVogal(first)) {
-				vogaisCount.put(first, 1);
+			if(isVogal(request.charAt(0))) {
+				vogaisCount.put(request.charAt(0), 1);
 			}
-			//Buscar todas as vogais que sucedem uma consoante
-			for(int i = 1; i < request.length(); i++) {
-				if(isVogal(request.charAt(i)) && !isVogal(request.charAt(i - 1))) {
+			//Buscar todas as vogais que sucedem uma consoante e que essa consoante seja precedida de uma vogal
+			for(int i = 2; i < request.length(); i++) {
+				
+				Character first = request.charAt(i - 2);
+				Character second = request.charAt(i - 1);
+				Character third = request.charAt(i);
+				
+				if(	isVogal(third) && !isVogal(second) && isVogal(first) && !Objects.equals(first, third)) {
 					if( !vogaisCount.containsKey(request.charAt(i)) ) {
 						vogaisCount.put(request.charAt(i), 1);
 					}else if( vogaisCount.containsKey(request.charAt(i)) ) {
@@ -129,12 +137,13 @@ public class DesafioService {
 	}
 	//Verifica se uma letra é uma vogal
 	private boolean isVogal(Character charac) {
-		String letra = removerAcentos(""+Character.toUpperCase(charac));
+		String letra = removerAcentos(""+charac);
 		return VOGAIS.contains(letra.charAt(0));
 	}
 	//Caso exista caracteres especiais, devem ser tratados
 	private String removerAcentos(String str) {
 	    return Normalizer.normalize(str, Normalizer.Form.NFD).replaceAll(EXP_REG_REMOV_ESP, "");
 	}	
+	
 
 }

@@ -1,8 +1,8 @@
 package com.cortes.desafio.solutis.resource;
 
-import org.h2.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,7 +28,7 @@ public class DesafioResource {
 	@PostMapping
 	public ResponseEntity<Desafio> save(@RequestBody String request){
 		String requestStr = request.trim();
-		if(StringUtils.isNullOrEmpty(requestStr)) {
+		if(StringUtils.isEmpty(requestStr)) {
 			throw new GenericException("Parametro Obrigatório");
 		}
 		
