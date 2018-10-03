@@ -10,6 +10,6 @@ Tomcat 8
 
 # Uso
 
-Atualmente api só permite ser acessado pelo endereço 'http://localhost:4200' e os métodos GET e POST, caso queira alterar, basta ir na classe com.cortes.desafio.solutis.config.CORSConfig e fazer as alterações desejadas. Ex.: Para permitir qualquer dominio e métodos mude para addAllowedOrigin("*") e addAllowedMethod("*");
+Atualmente api só permite ser acessado pelo endereço 'http://localhost:4200' e os métodos GET e POST, caso queira alterar, basta ir na classe com.cortes.desafio.solutis.config.CORSConfig e fazer as alterações desejadas. Ex.: Para permitir qualquer dominio e métodos mude para addAllowedOrigin("\*") e addAllowedMethod("\*");
 
 Faça o deploy e faça bom uso.
